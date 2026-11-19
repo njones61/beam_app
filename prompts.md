@@ -103,3 +103,11 @@ For each request, record:
 
 **Status:** ✅ Done. Verified with `gh repo view`: visibility is PUBLIC.
 
+## Entry 10: Enable GitHub Pages
+
+**What was asked:** "do it" (turn on GitHub Pages for the now-public repo).
+
+**What changed:** Enabled Pages for `njones61/beam_app` on branch `main`, folder `/` (via `gh api`). The site builds from the app files already on GitHub; I did not push. Live at https://jonesgeo.com/beam_app/ (your custom domain; https://njones61.github.io/beam_app/ redirects there).
+
+**Status:** ✅ Works. Build finished ("built"), the URL returns 200 with the Beam Designer page, and the served file matches `index.html` on `origin/main`. HTTPS is not enforced in the Pages settings.
+
