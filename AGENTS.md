@@ -23,3 +23,8 @@ When creating new files:
 ## Logging
 
 - After each request, add an entry to prompts.md: what I asked, what you changed, and whether it worked.
+
+## Version control
+
+- Auto-commit my changes: after finishing each request (and its prompts.md entry), commit everything changed in a single commit with a short, descriptive message. Don't push.
+- If I undo or revert an edit, don't redo it unless I ask.

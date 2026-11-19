@@ -83,3 +83,15 @@ For each request, record:
 
 **Status:** ✅ Works. Checked in the browser for the simply supported example and a cantilever with mixed loads, and with no loads. No JS errors. Seen only at a narrow preview width.
 
+
+## Entry 8: Auto-commit going forward
+
+**What was asked:** Auto-commit my changes from now on.
+
+**What changed:**
+- Created the first git commit (`0600286`) with the whole project as it stands.
+- `AGENTS.md`: added a Version control section (commit after each request, no push, don't redo edits I undo).
+- Correction to entries 6 and 7: you undid the cross-section and the scaled deflected-shape edits (and the matching `spec.md` notes). `index.html` and `spec.md` are currently without them, and I did not re-add them. Those two entries describe changes that are not in the files.
+
+**Status:** ✅ Done.
+
