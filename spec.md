@@ -23,6 +23,8 @@ design of record.
   - Steel W-shape from a dropdown, with grade selectable:
     A992 (Fy = 50 ksi, default), A36 (Fy = 36 ksi), or a custom Fy
   - Lumber: species/grade and nominal size (see Data)
+- Steel sections are drawn to scale under the dropdown (d, bf, tf, tw, x-x
+  axis)
 - Deflection limit denominator (default 360)
 
 ## Calculations

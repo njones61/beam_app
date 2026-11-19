@@ -111,3 +111,14 @@ For each request, record:
 
 **Status:** ✅ Works. Build finished ("built"), the URL returns 200 with the Beam Designer page, and the served file matches `index.html` on `origin/main`. HTTPS is not enforced in the Pages settings.
 
+## Entry 11: Restore the cross-section plot
+
+**What was asked:** "when i clicked 'undo' you reverted too much! restore my cross section plot".
+
+**What changed:**
+- `index.html`: re-added the to-scale W-shape cross-section under the shape dropdown (d, bf, tf, tw labels, dashed x-x axis; fillets ignored), redrawn whenever the shape changes. Same code as in entry 6.
+- `spec.md`: re-added the one-line cross-section note.
+- Not restored (not asked): the scaled deflected shape from entry 7, and the earlier `spec.md` edits that made the app steel-only. `spec.md` still lists lumber as an input, which does not match the app.
+
+**Status:** ✅ Works. Verified in the browser after a reload: no JS errors, the section renders for W12x26 (default), W14x873, W8x10 and W24x55 with finite dimensions, and the verdict and diagrams are unaffected.
+

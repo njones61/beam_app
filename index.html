@@ -32,6 +32,8 @@ input[readonly] { background: #f0f3f7; color: var(--muted); }
 .check { flex-direction: row; align-items: center; gap: 8px; }
 .check input { width: auto; }
 .check label { font-size: 13px; color: var(--text); font-weight: 500; }
+.section-fig { background: #f6f8fb; border: 1px solid var(--line); border-radius: 8px; padding: 6px; margin: 2px 0 8px; text-align: center; }
+.section-fig svg { width: 100%; max-width: 300px; height: auto; display: block; margin: 0 auto; }
 .props { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px 10px; background: #f6f8fb; border: 1px solid var(--line); border-radius: 8px; padding: 10px; margin: 2px 0 10px; }
 .props div { font-size: 11px; color: var(--muted); } .props b { display: block; font-size: 13px; color: var(--text); font-weight: 600; }
 .lhead, .lrow { display: grid; gap: 6px; align-items: center; }
@@ -104,6 +106,7 @@ td .f { display: block; font-size: 11.5px; color: var(--muted); margin-top: 2px;
       <label for="shape">Steel W-shape</label>
       <select id="shape"></select>
     </div>
+    <div class="section-fig" id="section"></div>
     <div class="props" id="props"></div>
     <div class="row2">
       <div class="field">
@@ -547,9 +550,38 @@ function syncForm() {
   renderProps();
 }
 
+// To-scale W-shape cross-section (fillets ignored)
+function sectionSvg(s) {
+  const VW = 300, VH = 230, left = 56, right = 64, top = 14, bottom = 36;
+  const sc = Math.min((VW - left - right) / s.bf, (VH - top - bottom) / s.d);
+  const w = s.bf * sc, h = s.d * sc;
+  const tf = Math.max(s.tf * sc, 1.5), tw = Math.max(s.tw * sc, 1.5);
+  const cx = left + (VW - left - right) / 2, L = cx - w / 2, R = cx + w / 2;
+  const T = top + (VH - top - bottom - h) / 2, B = T + h, mid = (T + B) / 2;
+  const pts = [[L, T], [R, T], [R, T + tf], [cx + tw / 2, T + tf], [cx + tw / 2, B - tf], [R, B - tf], [R, B], [L, B], [L, B - tf], [cx - tw / 2, B - tf], [cx - tw / 2, T + tf], [L, T + tf]]
+    .map(p => p[0].toFixed(2) + ',' + p[1].toFixed(2)).join(' ');
+  const dx = L - 14, dy = B + 13;
+  const t = (x, y, str, extra = '') => `<text x="${x}" y="${y}" font-size="11" fill="#1d2733" ${extra}>${str}</text>`;
+  return `<svg viewBox="0 0 ${VW} ${VH}" role="img" aria-label="Cross-section of ${label(s.name)}" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif">
+    <polygon points="${pts}" fill="#dbe5f1" stroke="#1f3a5f" stroke-width="1.5" stroke-linejoin="round"/>
+    <line x1="${L - 8}" x2="${R + 8}" y1="${mid}" y2="${mid}" stroke="#d6453d" stroke-width="1" stroke-dasharray="5 3"/>
+    ${t(R + 10, mid - 4, 'x–x', 'fill="#d6453d" font-size="10"')}
+    <g stroke="#64707d" stroke-width="1">
+      <line x1="${dx}" x2="${dx}" y1="${T}" y2="${B}"/><line x1="${dx - 4}" x2="${dx + 4}" y1="${T}" y2="${T}"/><line x1="${dx - 4}" x2="${dx + 4}" y1="${B}" y2="${B}"/>
+      <line x1="${L}" x2="${R}" y1="${dy}" y2="${dy}"/><line x1="${L}" x2="${L}" y1="${dy - 4}" y2="${dy + 4}"/><line x1="${R}" x2="${R}" y1="${dy - 4}" y2="${dy + 4}"/>
+      <line x1="${cx + tw / 2}" x2="${R + 6}" y1="${mid + 14}" y2="${mid + 14}"/>
+    </g>
+    ${t(dx - 6, mid, `d = ${s.d}`, `text-anchor="middle" transform="rotate(-90 ${dx - 6} ${mid})"`)}
+    ${t(cx, dy + 15, `b<tspan font-size="8" dy="2">f</tspan><tspan dy="-2"> = ${s.bf}</tspan>`, 'text-anchor="middle"')}
+    ${t(R + 10, T + tf / 2 + 4, `t<tspan font-size="8" dy="2">f</tspan><tspan dy="-2"> = ${s.tf}</tspan>`)}
+    ${t(R + 10, mid + 18, `t<tspan font-size="8" dy="2">w</tspan><tspan dy="-2"> = ${s.tw}</tspan>`)}
+  </svg>`;
+}
+
 function renderProps() {
   const s = SHAPES.find(x => x.name === state.shape);
-  if (!s) { $('props').innerHTML = ''; return; }
+  if (!s) { $('props').innerHTML = ''; $('section').innerHTML = ''; return; }
+  $('section').innerHTML = sectionSvg(s);
   const cell = (k, v) => `<div>${k}<b>${v}</b></div>`;
   $('props').innerHTML = cell('d (in)', s.d) + cell('t<sub>w</sub> (in)', s.tw) + cell('A (in²)', s.A) + cell('wt (plf)', s.w) +
     cell('I<sub>x</sub> (in⁴)', s.Ix) + cell('S<sub>x</sub> (in³)', s.Sx) + cell('b<sub>f</sub> (in)', s.bf) + cell('E (ksi)', E_STEEL.toLocaleString());
