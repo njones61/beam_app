@@ -95,3 +95,11 @@ For each request, record:
 
 **Status:** ✅ Done.
 
+## Entry 9: Make the repo public
+
+**What was asked:** Change my repo to public.
+
+**What changed:** Set `njones61/beam_app` on GitHub from private to public with `gh repo edit` (https://github.com/njones61/beam_app). No project files changed besides this log entry.
+
+**Status:** ✅ Done. Verified with `gh repo view`: visibility is PUBLIC.
+
